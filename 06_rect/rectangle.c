@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 //I've provided "min" and "max" functions in
@@ -15,16 +16,54 @@ int max (int a, int b) {
   return b;
 }
 
+typedef struct{
+  int x;
+  int y;
+  int width;
+  int height;
+} rectangle;
 //Declare your rectangle structure here!
 
 
 rectangle canonicalize(rectangle r) {
   //WRITE THIS FUNCTION
+  if(r.width<0){
+    r.x+=r.width;
+    r.width=-r.width;
+  }
+
+  if(r.height < 0){
+    r.y+=r.height;
+    r.height=-r.height;
+  }
   return r;
 }
 rectangle intersection(rectangle r1, rectangle r2) {
   //WRITE THIS FUNCTION
-  return r1;
+  const rectangle Empty={0,0,0,0};
+  r1=canonicalize(r1);
+  r2=canonicalize(r2);
+
+  int x_left=max(r1.x,r2.x);
+  int x_right=min(r1.x+r1.width,r2.x+r2.width);
+  if(x_left>x_right){
+    return Empty;
+  }
+
+  int y_bottom=max(r1.y,r2.y);
+  int y_top=min(r1.y+r1.height,r2.y+r2.height);
+  if(y_bottom > y_top){
+    return Empty;
+  }
+
+  rectangle ret ={
+    x_left,
+    y_bottom,
+    x_right-x_left,
+    y_top-y_bottom
+  };
+  
+  return ret;
 }
 
 //You should not need to modify any code below this line
