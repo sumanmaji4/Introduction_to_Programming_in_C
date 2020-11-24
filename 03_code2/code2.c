@@ -19,16 +19,18 @@ int printTriangle(int size) {
   //your answer is starCount
 
 
-  int cnt =0,i,j;
+  int starCount = 0;
+  int i,j;
 
   for(i=0;i<size;i++){
     for(j=0;j<=i;j++){
       printf("*");
-      cnt++;
+      starCount++;
     }
     printf("\n");
   }
-  return cnt;
+  
+  return starCount;
   
 }
 
