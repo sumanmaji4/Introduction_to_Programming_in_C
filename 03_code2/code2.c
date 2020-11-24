@@ -18,6 +18,18 @@ int printTriangle(int size) {
 
   //your answer is starCount
 
+
+  int cnt =0,i,j;
+
+  for(i=0;i<size;i++){
+    for(j=0;j<=i;j++){
+      printf("*");
+      cnt++;
+    }
+    printf("\n");
+  }
+  return cnt;
+  
 }
 
 
@@ -32,7 +44,9 @@ int main(void) {
 
   //finally, print "That triangle had %d total stars\n", such that the %d 
   //prints the value of numStars
-
+  printf("Here is a triangle with hight 7\n");
+  numStars=printTriangle(7);
+  printf("That triangle had %d total stars\n,numStar",numStars);
 
   return 0;
 }
