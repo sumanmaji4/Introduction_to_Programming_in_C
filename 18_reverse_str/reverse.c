@@ -3,6 +3,15 @@
 #include <string.h>
 
 void reverse(char * str) {
+  if (str == NULL) return;
+  size_t len = strlen(str);
+  char x ;
+  for(size_t i=0 ; i < len/2 ; i++){
+    x=str[i];
+    str[i]=str[len-i-1];
+    str[len-1-i]=x;
+  }
+  return;
   //WRITE ME!
 }
 
