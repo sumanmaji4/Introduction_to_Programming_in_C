@@ -459,3 +459,38 @@ hand_eval_t evaluate_hand(deck_t * hand) {
   }
   return build_hand_from_match(hand, 0, NOTHING, 0);
 }
+
+
+unsigned * get_match_counts(deck_t * hand) {
+  unsigned * elems=malloc(sizeof(* elems)*hand->n_cards);
+  size_t num = hand->n_cards;
+  //  initialize elems to be safe
+  for (int i=0; i< num; i++){
+    elems[i]=0;
+  }
+
+  for (int i=0; i< num; i++){
+    if (elems[i]<1){
+      //check value in position i against all other values and get the total number of counts
+      unsigned count=1;
+      for (int x=0; x<num; x++){
+	if (x==i) continue;
+	if (hand->cards[i]->value==hand->cards[x]->value){
+	  count++;
+	}
+      }
+      // assign count to current element
+      elems[i]=count;
+
+      // assign count to same elements
+      for (int x=0; x<num; x++){
+	if (x==i) continue;
+	if (hand->cards[i]->value==hand->cards[x]->value){
+	  elems[x]=count;
+	}
+      }
+    }
+  }
+  return elems;
+}
+
