@@ -3,13 +3,6 @@
 #include <stdlib.h>
 #include <assert.h>
 
-
-int com1(card_t c1,card_t c2){
-  if (c1.value == c2.value) return 1;
-  return 0;
-}
-
-
 int card_ptr_comp(const void * vp1, const void * vp2) {
   const card_t * const * cp1 = vp1;
   const card_t * const * cp2 = vp2;
@@ -178,11 +171,45 @@ int is_straight_at(deck_t * hand, size_t index, suit_t fs) {
   int result=0;
   // printf("In is_straightat\n");
   // for (size_t i=index; i<6; i++) {
+  // if (i>5) break;
+  // printf("value is: %u", hand->cards[i+1]->value);
+  //  unsigned card1val=hand->cards[i]->value;
+  //  unsigned card2val=hand->cards[i+1]->value;
+  // // if (card1val==card2val) continue;
+  // // suit_t card1s=hand->cards[i]->suit;
+  //  //suit_t card2s=hand->cards[i+1]->suit;
+  // if (card1val==card2val) continue;
+  //  if (strt_conts(card1val, card2val)){
+  //  len++;
+  // }
   // }
   result=is_n_length_straight_at(hand, index, fs, hand->n_cards);
   // printf("about to return: %d",result);
   return result;
 
+  /* if (fs==NUM_SUITS){ */
+  /* if (card1val==card2val) continue; */
+  /* if (strt_conts(card1val, card2val)){ */
+  /*   //  printf("len is:%d\n",len); */
+  /* len++; */
+  /* if (len>=5) return 1; */
+  /*   }else{ */
+  /* break; */
+  /*   } */
+  /*   } */
+
+  /*   if (fs!=NUM_SUITS){ */
+  /* //if (card1val==card2val) continue; */
+  /* if (strt_conts(card1val,card2val)&&suitSame(card1s,card2s,fs)){ */
+  /*   len++; */
+  /*   printf("len is:%d\n", len); */
+  /*   if (len>=5) return 1; */
+  /*  }else{ */
+  /*   break; */
+
+  /*    } */
+  /*   } */
+  /*   } */
   /* if (len>=5){ */
   /*   return 1; */
   /* }else{ */
@@ -303,25 +330,38 @@ int compare_hands(deck_t * hand1, deck_t * hand2) {
 //implementation in eval-c4.o) so that the
 //other functions we have provided can make
 //use of get_match_counts.
+unsigned * get_match_counts(deck_t * hand) {
+  unsigned * elems=malloc(sizeof(* elems)*hand->n_cards);
+  size_t num = hand->n_cards;
+  //  initialize elems to be safe
+  for (int i=0; i< num; i++){
+    elems[i]=0;
+  }
 
+  for (int i=0; i< num; i++){
+    if (elems[i]<1){
+      //check value in position i against all other values and get the total number of counts
+      unsigned count=1;
+      for (int x=0; x<num; x++){
+	if (x==i) continue;
+	if (hand->cards[i]->value==hand->cards[x]->value){
+	  count++;
+	}
+      }
+      // assign count to current element
+      elems[i]=count;
 
-
-//unsigned * get_match_counts(deck_t * hand);
-
-// edit
-
-
-
-
-
-
-
-
-
-
-
-      
-
+      // assign count to same elements
+      for (int x=0; x<num; x++){
+	if (x==i) continue;
+	if (hand->cards[i]->value==hand->cards[x]->value){
+	  elems[x]=count;
+	}
+      }
+    }
+  }
+  return elems;
+}
 
 // We provide the below functions.  You do NOT need to modify them
 // In fact, you should not modify them!
@@ -455,39 +495,5 @@ hand_eval_t evaluate_hand(deck_t * hand) {
     return build_hand_from_match(hand, 2, PAIR, match_idx);
   }
   return build_hand_from_match(hand, 0, NOTHING, 0);
-}
-
-
-unsigned * get_match_counts(deck_t * hand) {
-  unsigned * elems=malloc(sizeof(* elems)*hand->n_cards);
-  size_t num = hand->n_cards;
-  //  initialize elems to be safe
-  for (int i=0; i< num; i++){
-    elems[i]=0;
-  }
-
-  for (int i=0; i< num; i++){
-    if (elems[i]<1){
-      //check value in position i against all other values and get the total number of counts
-      unsigned count=1;
-      for (int x=0; x<num; x++){
-	if (x==i) continue;
-	if (hand->cards[i]->value==hand->cards[x]->value){
-	  count++;
-	}
-      }
-      // assign count to current element
-      elems[i]=count;
-
-      // assign count to same elements
-      for (int x=0; x<num; x++){
-	if (x==i) continue;
-	if (hand->cards[i]->value==hand->cards[x]->value){
-	  elems[x]=count;
-	}
-      }
-    }
-  }
-  return elems;
 }
 
