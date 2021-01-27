@@ -1,12 +1,19 @@
-Grading at Wed Jan 27 15:11:24 UTC 2021
+Grading at Wed Jan 27 15:14:44 UTC 2021
 Compiling deck.c -> deck.o
 Compiling eval.c -> eval.o
-eval.c:464:12: error: redefinition of ‘get_match_counts’
+eval.c: In function ‘evaluate_hand’:
+eval.c:401:29: error: implicit declaration of function ‘get_match_counts’ [-Werror=implicit-function-declaration]
+   unsigned * match_counts = get_match_counts(hand);
+                             ^
+eval.c:401:29: error: initialization makes pointer from integer without a cast [-Werror=int-conversion]
+eval.c: At top level:
+eval.c:461:12: error: conflicting types for ‘get_match_counts’
  unsigned * get_match_counts(deck_t * hand) {
             ^
-eval.c:313:12: note: previous definition of ‘get_match_counts’ was here
- unsigned * get_match_counts(deck_t * hand) {
-            ^
+eval.c:401:29: note: previous implicit declaration of ‘get_match_counts’ was here
+   unsigned * match_counts = get_match_counts(hand);
+                             ^
+cc1: all warnings being treated as errors
 Compilation of eval.c failed
 
 Overall Grade: F
