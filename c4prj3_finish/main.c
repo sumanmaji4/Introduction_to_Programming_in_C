@@ -11,7 +11,6 @@
 
 
 
-
 size_t find_winning_hand(deck_t ** hands, size_t n) {
 
   size_t num_winner = 0;
