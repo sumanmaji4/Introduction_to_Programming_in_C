@@ -1,10 +1,15 @@
-#include<string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include "deck.h"
-#include "cards.h"
 #include "future.h"
+#include "input.h"
+#include "cards.h"
+
+
+
+
 deck_t * hand_from_string(const char * str, future_cards_t * fc){
   deck_t* deck=malloc(sizeof(*deck));
   deck->cards = NULL;
