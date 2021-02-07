@@ -5,80 +5,49 @@
 #include "deck.h"
 #include "cards.h"
 #include "future.h"
-
-
-
-
-
 deck_t * hand_from_string(const char * str, future_cards_t * fc){
-  deck_t * deck=malloc(sizeof(*deck));
-  deck->cards=NULL;
+  deck_t* deck=malloc(sizeof(*deck));
+  deck->cards = NULL;
   deck->n_cards=0;
-
-  // analyse imported line
-  for (int i=0; i<strlen(str); i++){
-
-    // ignore characters space or newline
-    if(str[i] == ' ' || str[i] == '\n') continue;
-
-    // if card is not unknown, add it
-    if(str[i] != '?') {
-      card_t card = card_from_letters(str[i], str[i+1]);
-      add_card_to(deck,card);
-      i++;
-    }else{
-      // if card is unknown add a future card
-      char str_n[strlen(str)];
-      int n=0;
-      i++;
-
-      // copy all card characters to the string up to next newline or space
-      while (!(str[i] == ' '|| str[i] == '\n' )){
-	str_n[n]=str[i];
+  for(int i=0;i<strlen(str);i++){
+    if((str[i] == '\n')||(str[i] == ' '))continue;
+    else{
+      if(str[i] == '?'){
 	i++;
-	n++;
+	char num[strlen(str)];
+	int n=0;
+	while(!((str[i] == '\n')||(str[i] == ' '))) {
+	  num[n]=str[i];
+	  i++;n++;}
+	num[n]='\0';
+	add_future_card(fc,atoi(num),add_empty_card(deck)) ;
+
       }
-      // finish card string with terminator
-      str_n[n]= '\0';
-      add_future_card(fc, atoi(str_n), add_empty_card(deck));
+      else{
+	card_t x = card_from_letters(str[i],str[i+1]);
+	add_card_to(deck,x);
+	i++;}
     }
   }
-
-  // hands have to be minimum 5 cards
-  if (deck->n_cards < 5) {
-    fprintf(stderr, "Hands smaller than 5 cards");
+  if (deck->n_cards < 5 ){
     return NULL;
-  }
+    fprintf(stderr,"asas");}
   return deck;
-
 }
-
-
 deck_t ** read_input(FILE * f, size_t * n_hands, future_cards_t * fc){
-  assert(f!=NULL);
-  size_t num = 0;
-  size_t sz = 0;
-  char * line = NULL;
-  deck_t ** r_deck = NULL;
-  while(getline(&line, &sz, f)!=EOF){
-
-    // create a hand from each valid line in file
-    r_deck=realloc(r_deck,sizeof(* r_deck)*(num+1));
-    deck_t * temp = hand_from_string(line,fc);
-    if (temp!=NULL){
-      // import "temp" to returned deck
-      r_deck[num]=temp;
-      num++;
-    }else{
-      // if line invalid go to next line or end if EOF
-      continue;
-    }
-
-
+  deck_t **arr=NULL;
+  size_t n_hand=0;
+  char *line=NULL;
+  size_t sz=0;
+  while(getline(&line,&sz,f)>=0){
+    arr=realloc(arr,(n_hand+1)*sizeof(*arr));
+    deck_t*deck=hand_from_string(line,fc);
+    if (deck == NULL)continue;
+    arr[n_hand]=deck;
+    n_hand ++;
   }
-  * n_hands = num;
   free(line);
-  return r_deck;
+  *n_hands=n_hand;
+  return arr;
 }
-
 

@@ -27,4 +27,3 @@ test-find_straight.o: test-find_straight.c
 
 clean:
 		rm -rf *.o poker *~
-
